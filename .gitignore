@@ -2,3 +2,8 @@
 *.d
 *.a
 *.pyc
+src/lsh/bin/*
+*.depend
+src/vgen/vgrouping/computeranges
+src/vgen/vgrouping/dispatchvectors
+src/vgen/vgrouping/vectorsort

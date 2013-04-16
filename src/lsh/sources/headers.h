@@ -31,7 +31,7 @@
 #include "NearNeighbors.h"
 
 #ifdef DEBUG_MEM
-#include <malloc.h>
+#include <sys/malloc.h>
 #endif
 
 #ifdef DEBUG_TIMINGS
