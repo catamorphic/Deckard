@@ -1,30 +1,30 @@
 
-Statement
-    : Block
-    | VariableStatement
-    | EmptyStatement
-    | ExpressionStatement
-    | IfStatement
-    | IterationStatement
-    | ContinueStatement
-    | BreakStatement
-    | ReturnStatement
-    | WithStatement
-    | LabelledStatement
-    | SwitchStatement
-    | ThrowStatement
-    | TryStatement
-    | DebuggerStatement
+statement
+    : block
+    | variable_statement
+    | empty_statement
+    | expression_statement
+    | if_statement
+    | iteration_statement
+    | continue_statement
+    | break_statement
+    | return_statement
+    | with_statement
+    | labelled_statement
+    | switch_statement
+    | throw_statement
+    | try_statement
+    | debugger_statement
     ;
 
-Block
-    : "{" StatementList "}"
+block
+    : LBRACE statement_list RBRACE
         {
         }
     ;
 
-StatementList
-    : StatementList Statement
+statement_list
+    : statement_list statement
         {
         }
     |
@@ -32,62 +32,62 @@ StatementList
         }
     ;
 
-VariableStatement
-    : "VAR" VariableDeclarationList
+variable_statement
+    : VAR variable_declaration_list
         {
         }
     ;
 
-VariableDeclarationList
-    : VariableDeclaration
+variable_declaration_list
+    : variable_declaration
         {
         }
-    | VariableDeclarationList "," VariableDeclaration
-        {
-        }
-    ;
-
-VariableDeclarationListNoIn
-    : VariableDeclarationNoIn
-        {
-        }
-    | VariableDeclarationListNoIn "," VariableDeclarationNoIn
+    | variable_declaration_list COMMA variable_declaration
         {
         }
     ;
 
-VariableDeclaration
-    : "IDENTIFIER"
+variable_declaration_list_no_in
+    : variable_declaration_list_no_in
         {
         }
-    | "IDENTIFIER" Initialiser
-        {
-        }
-    ;
-
-VariableDeclarationNoIn
-    : "IDENTIFIER"
-        {
-        }
-    | "IDENTIFIER" InitialiserNoIn
+    | variable_declaration_list_no_in "," variable_declaration_no_in
         {
         }
     ;
 
-Initialiser
-    : "=" AssignmentExpression
+variable_declaration
+    : IDENTIFIER
+        {
+        }
+    | IDENTIFIER initializer
         {
         }
     ;
 
-InitialiserNoIn
-    : "=" AssignmentExpressionNoIn
+variable_declaration_no_in
+    : IDENTIFIER
+        {
+        }
+    | IDENTIFIER initializer_no_in
         {
         }
     ;
 
-EmptyStatement
-    : ";"
+initializer
+    : EQ assignment_expression
+        {
+        }
+    ;
+
+initializer_no_in
+    : EQ assignment_expression_no_in
+        {
+        }
+    ;
+
+empty_statement
+    : SEMI
         {
         }
     ;
