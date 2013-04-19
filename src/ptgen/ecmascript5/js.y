@@ -983,13 +983,13 @@ assignment_operator
     | MINUS_EQ
     | LSHIFT_EQ
     | RSHIFT_EQ
-    | GT3_Eq
+    | GT3_EQ
     | AMPER_EQ
     | CARET_EQ
     | PIPE_EQ
     ;
 
-Expression
+expression
     : assignment_expression
     | expression COMMA assignment_expression
         {
