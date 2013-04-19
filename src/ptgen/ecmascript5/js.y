@@ -51,7 +51,7 @@ variable_declaration_list_no_in
     : variable_declaration_list_no_in
         {
         }
-    | variable_declaration_list_no_in "," variable_declaration_no_in
+    | variable_declaration_list_no_in , variable_declaration_no_in
         {
         }
     ;
@@ -92,146 +92,146 @@ empty_statement
         }
     ;
 
-ExpressionStatement
-    : ExpressionNoBF ";"
+expression_statement
+    : expression_no_bf ;
         {
         }
-    | ExpressionNoBF error
-        {
-        }
-    ;
-
-IfStatement
-    : "IF" "(" Expression ")" Statement
-        {
-        }
-    | "IF" "(" Expression ")" Statement "ELSE" Statement
+    | expression_no_bf error
         {
         }
     ;
 
-IterationStatement
-    : "DO" Statement "WHILE" "(" Expression ")" ";"
+if_statement
+    : IF LPAREN expression RPAREN statement
         {
         }
-    | "DO" Statement "WHILE" "(" Expression ")" error
-        {
-        }
-    | "WHILE" "(" Expression ")" Statement
-        {
-        }
-    | "FOR" "(" ExpressionNoIn ";" Expression ";" Expression ")" Statement
-        {
-        }
-    | "FOR" "(" ExpressionNoIn ";" Expression ";" ")" Statement
-        {
-        }
-    | "FOR" "(" ExpressionNoIn ";" ";" Expression ")" Statement
-        {
-        }
-    | "FOR" "(" ExpressionNoIn ";" ";" ")" Statement
-        {
-        }
-    | "FOR" "(" ";" Expression ";" Expression ")" Statement
-        {
-        }
-    | "FOR" "(" ";" Expression ";" ")" Statement
-        {
-        }
-    | "FOR" "(" ";" ";" Expression ")" Statement
-        {
-        }
-    | "FOR" "(" ";" ";" ")" Statement
-        {
-        }
-    | "FOR" "(" "VAR" VariableDeclarationListNoIn ";" Expression ";" Expression ")" Statement
-        {
-        }
-    | "FOR" "(" "VAR" VariableDeclarationListNoIn ";" Expression ";" ")" Statement
-        {
-        }
-    | "FOR" "(" "VAR" VariableDeclarationListNoIn ";" ";" Expression ")" Statement
-        {
-        }
-    | "FOR" "(" "VAR" VariableDeclarationListNoIn ";" ";" ")" Statement
-        {
-        }
-    | "FOR" "(" LeftHandSideExpression "IN" Expression ")" Statement
-        {
-        }
-    | "FOR" "(" "VAR" VariableDeclarationNoIn "IN" Expression ")" Statement
+    | IF LPAREN expression RPAREN statement ELSE statement
         {
         }
     ;
 
-ContinueStatement
-    : "CONTINUE" ";"
+iteration_statement
+    : DO statement WHILE LPAREN expression RPAREN SEMI
         {
         }
-    | "CONTINUE" error
+    | DO statement WHILE LPAREN expression RPAREN error
         {
         }
-    | "CONTINUE" "IDENTIFIER" ";"
+    | WHILE LPAREN expression RPAREN statement
         {
         }
-    | "CONTINUE" "IDENTIFIER" error
+    | FOR LPAREN expression_no_in SEMI expression SEMI expression RPAREN statement
         {
         }
-    ;
-
-BreakStatement
-    : "BREAK" ";"
+    | FOR LPAREN expression_no_in SEMI expression SEMI RPAREN statement
         {
         }
-    | "BREAK" error
+    | FOR LPAREN expression_no_in SEMI SEMI expression RPAREN statement
         {
         }
-    | "BREAK" "IDENTIFIER" ";"
+    | FOR LPAREN expression_no_in SEMI SEMI RPAREN statement
         {
         }
-    | "BREAK" "IDENTIFIER" error
+    | FOR LPAREN SEMI expression SEMI expression RPAREN statement
         {
         }
-    ;
-
-ReturnStatement
-    : "RETURN" ";"
+    | FOR LPAREN SEMI expression SEMI RPAREN statement
         {
         }
-    | "RETURN" error
+    | FOR LPAREN SEMI SEMI expression RPAREN statement
         {
         }
-    | "RETURN" Expression ";"
+    | FOR LPAREN SEMI SEMI RPAREN statement
         {
         }
-    | "RETURN" Expression error
+    | FOR LPAREN VAR variable_declaration_list_no_in SEMI expression SEMI expression RPAREN statement
         {
         }
-    ;
-
-WithStatement
-    : "WITH" "(" Expression ")" Statement
+    | FOR LPAREN VAR variable_declaration_list_no_in ; expression ; RPAREN statement
         {
         }
-    ;
-
-SwitchStatement
-    : "SWITCH" "(" Expression ")" CaseBlock
+    | FOR LPAREN VAR variable_declaration_list_no_in ; ; expression RPAREN statement
+        {
+        }
+    | FOR LPAREN VAR variable_declaration_list_no_in ; ; RPAREN statement
+        {
+        }
+    | FOR LPAREN left_hand_side_expression IN expression RPAREN statement
+        {
+        }
+    | FOR LPAREN VAR variable_declaration_no_in IN expression RPAREN statement
         {
         }
     ;
 
-CaseBlock
-    : "{" CaseClauses "}"
+continue_statement
+    : CONTINUE SEMI
         {
         }
-    | "{" CaseClauses DefaultClause CaseClauses "}"
+    | CONTINUE error
+        {
+        }
+    | CONTINUE IDENTIFIER SEMI
+        {
+        }
+    | CONTINUE IDENTIFIER error
         {
         }
     ;
 
-CaseClauses
-    : CaseClauses CaseClause
+break_statement
+    : BREAK SEMI
+        {
+        }
+    | BREAK error
+        {
+        }
+    | BREAK IDENTIFIER SEMI
+        {
+        }
+    | BREAK IDENTIFIER error
+        {
+        }
+    ;
+
+return_statement
+    : RETURN SEMI
+        {
+        }
+    | RETURN error
+        {
+        }
+    | RETURN expression SEMI
+        {
+        }
+    | RETURN expression error
+        {
+        }
+    ;
+
+with_statement
+    : WITH LPAREN expression RPAREN statement
+        {
+        }
+    ;
+
+switch_statement
+    : SWITCH LPAREN expression RPAREN case_block
+        {
+        }
+    ;
+
+case_block
+    : { case_clases }
+        {
+        }
+    | { case_clases default_clause case_clases }
+        {
+        }
+    ;
+
+case_clases
+    : case_clases case_clause
         {
         }
     |
@@ -239,100 +239,100 @@ CaseClauses
         }
     ;
 
-CaseClause
-    : "CASE" Expression ":" StatementList
+case_clause
+    : CASE expression COLON statement_list
         {
         }
     ;
 
-DefaultClause
-    : "DEFAULT" ":" StatementList
+default_clause
+    : DEFAULT COLON statement_list
         {
         }
     ;
 
-LabelledStatement
-    : "IDENTIFIER" ":" Statement
+labelled_statement
+    : IDENTIFIER COLON statement
         {
         }
     ;
 
-ThrowStatement
-    : "THROW" Expression ";"
+throw_statement
+    : THROW expression ;
         {
         }
-    | "THROW" Expression error
-        {
-        }
-    ;
-
-TryStatement
-    : "TRY" Block Catch
-        {
-        }
-    | "TRY" Block Finally
-        {
-        }
-    | "TRY" Block Catch Finally
+    | THROW expression error
         {
         }
     ;
 
-Catch
-    : "CATCH" "(" "IDENTIFIER" ")" Block
+try_statement
+    : TRY block catch
+        {
+        }
+    | TRY block finally
+        {
+        }
+    | TRY block catch finally
         {
         }
     ;
 
-Finally
-    : "FINALLY" Block
+catch
+    : CATCH LPAREN IDENTIFIER RPAREN block
         {
         }
     ;
 
-DebuggerStatement
-    : "DEBUGGER" ";"
-        {
-        }
-    | "DEBUGGER" error
+finally
+    : FINALLY block
         {
         }
     ;
 
-FunctionDeclaration
-    : "FUNCTION" "IDENTIFIER" "(" ")" "{" FunctionBody "}"
+debugger_statement
+    : DEBUGGER ;
         {
         }
-    | "FUNCTION" "IDENTIFIER" "(" FormalParameterList ")" "{" FunctionBody "}"
+    | DEBUGGER error
+        {
+        }
+    ;
+
+function_declaration
+    : FUNCTION IDENTIFIER LPAREN RPAREN { function_body }
+        {
+        }
+    | FUNCTION IDENTIFIER LPAREN FormalParameterList RPAREN { function_body }
         {
         }
     ;
 
 FunctionExpression
-    : "FUNCTION" "IDENTIFIER" "(" ")" "{" FunctionBody "}"
+    : FUNCTION IDENTIFIER LPAREN RPAREN { function_body }
         {
         }
-    | "FUNCTION" "IDENTIFIER" "(" FormalParameterList ")" "{" FunctionBody "}"
+    | FUNCTION IDENTIFIER LPAREN FormalParameterList RPAREN { function_body }
         {
         }
-    | "FUNCTION" "(" ")" "{" FunctionBody "}"
+    | FUNCTION LPAREN RPAREN { function_body }
         {
         }
-    | "FUNCTION" "(" FormalParameterList ")" "{" FunctionBody "}"
+    | FUNCTION LPAREN FormalParameterList RPAREN { function_body }
         {
         }
     ;
 
 FormalParameterList
-    : "IDENTIFIER"
+    : IDENTIFIER
         {
         }
-    | FormalParameterList "," "IDENTIFIER"
+    | FormalParameterList , IDENTIFIER
         {
         }
     ;
 
-FunctionBody
+function_body
     : SourceElements
     ;
 
@@ -352,8 +352,8 @@ SourceElements
     ;
 
 SourceElement
-    : Statement
-    | FunctionDeclaration
+    : statement
+    | function_declaration
     ;
 
 PrimaryExpression
@@ -362,33 +362,33 @@ PrimaryExpression
     ;
 
 PrimaryExpressionNoBrace
-    : "THIS"
+    : THIS
         {
         }
-    | "IDENTIFIER"
+    | IDENTIFIER
         {
         }
     | Literal
     | ArrayLiteral
-    | "(" Expression ")"
+    | LPAREN expression RPAREN
         {
         }
     ;
 
 ArrayLiteral
-    : "[" "]"
+    : [ ]
         {
         }
-    | "[" Elision "]"
+    | [ Elision ]
         {
         }
-    | "[" ElementList "]"
+    | [ ElementList ]
         {
         }
-    | "[" ElementList "," "]"
+    | [ ElementList , ]
         {
         }
-    | "[" ElementList "," Elision "]"
+    | [ ElementList , Elision ]
         {
         }
     ;
@@ -400,31 +400,31 @@ ElementList
     | Elision AssignmentExpression
         {
         }
-    | ElementList "," AssignmentExpression
+    | ElementList , AssignmentExpression
         {
         }
-    | ElementList "," Elision AssignmentExpression
+    | ElementList , Elision AssignmentExpression
         {
         }
     ;
 
 Elision
-    : ","
+    : ,
         {
         }
-    | Elision ","
+    | Elision ,
         {
         }
     ;
 
 ObjectLiteral
-    : "{" "}"
+    : { }
         {
         }
-    | "{" PropertyNameAndValueList "}"
+    | { PropertyNameAndValueList }
         {
         }
-    | "{" PropertyNameAndValueList "," "}"
+    | { PropertyNameAndValueList , }
         {
         }
     ;
@@ -433,19 +433,19 @@ PropertyNameAndValueList
     : PropertyAssignment
         {
         }
-    | PropertyNameAndValueList "," PropertyAssignment
+    | PropertyNameAndValueList , PropertyAssignment
         {
         }
     ;
 
 PropertyAssignment
-    : PropertyName ":" AssignmentExpression
+    : PropertyName : AssignmentExpression
         {
         }
-    | "IDENTIFIER" PropertyName "(" ")" "{" FunctionBody "}"
+    | IDENTIFIER PropertyName LPAREN RPAREN { function_body }
         {
         }
-    | "IDENTIFIER" PropertyName "(" PropertySetParameterList ")" "{" FunctionBody "}"
+    | IDENTIFIER PropertyName LPAREN PropertySetParameterList RPAREN { function_body }
         {
         }
     ;
@@ -457,7 +457,7 @@ PropertyName
     ;
 
 PropertySetParameterList
-    : "IDENTIFIER"
+    : IDENTIFIER
         {
         }
     ;
@@ -465,40 +465,40 @@ PropertySetParameterList
 MemberExpression
     : PrimaryExpression
     | FunctionExpression
-    | MemberExpression "[" Expression "]"
+    | MemberExpression [ expression ]
         {
         }
-    | MemberExpression "." IdentifierName
+    | MemberExpression . IdentifierName
         {
         }
-    | "NEW" MemberExpression Arguments
+    | NEW MemberExpression Arguments
         {
         }
     ;
 
 MemberExpressionNoBF
     : PrimaryExpressionNoBrace
-    | MemberExpressionNoBF "[" Expression "]"
+    | MemberExpressionNoBF [ expression ]
         {
         }
-    | MemberExpressionNoBF "." IdentifierName
+    | MemberExpressionNoBF . IdentifierName
         {
         }
-    | "NEW" MemberExpression Arguments
+    | NEW MemberExpression Arguments
         {
         }
     ;
 
 NewExpression
     : MemberExpression
-    | "NEW" NewExpression
+    | NEW NewExpression
         {
         }
     ;
 
 NewExpressionNoBF
     : MemberExpressionNoBF
-    | "NEW" NewExpression
+    | NEW NewExpression
         {
         }
     ;
@@ -510,10 +510,10 @@ CallExpression
     | CallExpression Arguments
         {
         }
-    | CallExpression "[" Expression "]"
+    | CallExpression [ expression ]
         {
         }
-    | CallExpression "." IdentifierName
+    | CallExpression . IdentifierName
         {
         }
     ;
@@ -525,16 +525,16 @@ CallExpressionNoBF
     | CallExpressionNoBF Arguments
         {
         }
-    | CallExpressionNoBF "[" Expression "]"
+    | CallExpressionNoBF [ expression ]
         {
         }
-    | CallExpressionNoBF "." IdentifierName
+    | CallExpressionNoBF . IdentifierName
         {
         }
     ;
 
 IdentifierName
-    : "IDENTIFIER"
+    : IDENTIFIER
         {
         }
     | ReservedWord
@@ -543,10 +543,10 @@ IdentifierName
     ;
 
 Arguments
-    : "(" ")"
+    : LPAREN RPAREN
         {
         }
-    | "(" ArgumentList ")"
+    | LPAREN ArgumentList RPAREN
         {
         }
     ;
@@ -555,12 +555,12 @@ ArgumentList
     : AssignmentExpression
         {
         }
-    | ArgumentList "," AssignmentExpression
+    | ArgumentList , AssignmentExpression
         {
         }
     ;
 
-LeftHandSideExpression
+left_hand_side_expression
     : NewExpression
     | CallExpression
     ;
@@ -571,21 +571,21 @@ LeftHandSideExpressionNoBF
     ;
 
 PostfixExpression
-    : LeftHandSideExpression
-    | LeftHandSideExpression "++"
+    : left_hand_side_expression
+    | left_hand_side_expression ++
         {
         }
-    | LeftHandSideExpression "--"
+    | left_hand_side_expression --
         {
         }
     ;
 
 PostfixExpressionNoBF
     : LeftHandSideExpressionNoBF
-    | LeftHandSideExpressionNoBF "++"
+    | LeftHandSideExpressionNoBF ++
         {
         }
-    | LeftHandSideExpressionNoBF "--"
+    | LeftHandSideExpressionNoBF --
         {
         }
     ;
@@ -601,373 +601,373 @@ UnaryExpressionNoBF
     ;
 
 UnaryExpr
-    : "DELETE" UnaryExpression
+    : DELETE UnaryExpression
         {
         }
-    | "VOID" UnaryExpression
+    | VOID UnaryExpression
         {
         }
-    | "TYPEOF" UnaryExpression
+    | TYPEOF UnaryExpression
         {
         }
-    | "BR++" UnaryExpression
+    | BR++ UnaryExpression
         {
         }
-    | "BR--" UnaryExpression
+    | BR-- UnaryExpression
         {
         }
-    | "++" UnaryExpression
+    | ++ UnaryExpression
         {
         }
-    | "--" UnaryExpression
+    | -- UnaryExpression
         {
         }
-    | "+" UnaryExpression
+    | + UnaryExpression
         {
         }
-    | "-" UnaryExpression
+    | - UnaryExpression
         {
         }
-    | "~" UnaryExpression
+    | ~ UnaryExpression
         {
         }
-    | "!" UnaryExpression
+    | ! UnaryExpression
         {
         }
     ;
 
 MultiplicativeExpression
     : UnaryExpression
-    | MultiplicativeExpression "*" UnaryExpression
+    | MultiplicativeExpression * UnaryExpression
         {
         }
-    | MultiplicativeExpression "/" UnaryExpression
+    | MultiplicativeExpression / UnaryExpression
         {
         }
-    | MultiplicativeExpression "%" UnaryExpression
+    | MultiplicativeExpression % UnaryExpression
         {
         }
     ;
 
 MultiplicativeExpressionNoBF
     : UnaryExpressionNoBF
-    | MultiplicativeExpressionNoBF "*" UnaryExpression
+    | MultiplicativeExpressionNoBF * UnaryExpression
         {
         }
-    | MultiplicativeExpressionNoBF "/" UnaryExpression
+    | MultiplicativeExpressionNoBF / UnaryExpression
         {
         }
-    | MultiplicativeExpressionNoBF "%" UnaryExpression
+    | MultiplicativeExpressionNoBF % UnaryExpression
         {
         }
     ;
 
 AdditiveExpression
     : MultiplicativeExpression
-    | AdditiveExpression "+" MultiplicativeExpression
+    | AdditiveExpression + MultiplicativeExpression
         {
         }
-    | AdditiveExpression "-" MultiplicativeExpression
+    | AdditiveExpression - MultiplicativeExpression
         {
         }
     ;
 
 AdditiveExpressionNoBF
     : MultiplicativeExpressionNoBF
-    | AdditiveExpressionNoBF "+" MultiplicativeExpression
+    | AdditiveExpressionNoBF + MultiplicativeExpression
         {
         }
-    | AdditiveExpressionNoBF "-" MultiplicativeExpression
+    | AdditiveExpressionNoBF - MultiplicativeExpression
         {
         }
     ;
 
 ShiftExpression
     : AdditiveExpression
-    | ShiftExpression "<<" AdditiveExpression
+    | ShiftExpression << AdditiveExpression
         {
         }
-    | ShiftExpression ">>" AdditiveExpression
+    | ShiftExpression >> AdditiveExpression
         {
         }
-    | ShiftExpression ">>>" AdditiveExpression
+    | ShiftExpression >>> AdditiveExpression
         {
         }
     ;
 
 ShiftExpressionNoBF
     : AdditiveExpressionNoBF
-    | ShiftExpressionNoBF "<<" AdditiveExpression
+    | ShiftExpressionNoBF << AdditiveExpression
         {
         }
-    | ShiftExpressionNoBF ">>" AdditiveExpression
+    | ShiftExpressionNoBF >> AdditiveExpression
         {
         }
-    | ShiftExpressionNoBF ">>>" AdditiveExpression
+    | ShiftExpressionNoBF >>> AdditiveExpression
         {
         }
     ;
 
 RelationalExpression
     : ShiftExpression
-    | RelationalExpression "<" ShiftExpression
+    | RelationalExpression < ShiftExpression
         {
         }
-    | RelationalExpression ">" ShiftExpression
+    | RelationalExpression > ShiftExpression
         {
         }
-    | RelationalExpression "<=" ShiftExpression
+    | RelationalExpression <= ShiftExpression
         {
         }
-    | RelationalExpression ">=" ShiftExpression
+    | RelationalExpression >= ShiftExpression
         {
         }
-    | RelationalExpression "INSTANCEOF" ShiftExpression
+    | RelationalExpression INSTANCEOF ShiftExpression
         {
         }
-    | RelationalExpression "IN" ShiftExpression
+    | RelationalExpression IN ShiftExpression
         {
         }
     ;
 
 RelationalExpressionNoIn
     : ShiftExpression
-    | RelationalExpressionNoIn "<" ShiftExpression
+    | RelationalExpressionNoIn < ShiftExpression
         {
         }
-    | RelationalExpressionNoIn ">" ShiftExpression
+    | RelationalExpressionNoIn > ShiftExpression
         {
         }
-    | RelationalExpressionNoIn "<=" ShiftExpression
+    | RelationalExpressionNoIn <= ShiftExpression
         {
         }
-    | RelationalExpressionNoIn ">=" ShiftExpression
+    | RelationalExpressionNoIn >= ShiftExpression
         {
         }
-    | RelationalExpressionNoIn "INSTANCEOF" ShiftExpression
+    | RelationalExpressionNoIn INSTANCEOF ShiftExpression
         {
         }
     ;
 
 RelationalExpressionNoBF
     : ShiftExpressionNoBF
-    | RelationalExpressionNoBF "<" ShiftExpression
+    | RelationalExpressionNoBF < ShiftExpression
         {
         }
-    | RelationalExpressionNoBF ">" ShiftExpression
+    | RelationalExpressionNoBF > ShiftExpression
         {
         }
-    | RelationalExpressionNoBF "<=" ShiftExpression
+    | RelationalExpressionNoBF <= ShiftExpression
         {
         }
-    | RelationalExpressionNoBF ">=" ShiftExpression
+    | RelationalExpressionNoBF >= ShiftExpression
         {
         }
-    | RelationalExpressionNoBF "INSTANCEOF" ShiftExpression
+    | RelationalExpressionNoBF INSTANCEOF ShiftExpression
         {
         }
-    | RelationalExpressionNoBF "IN" ShiftExpression
+    | RelationalExpressionNoBF IN ShiftExpression
         {
         }
     ;
 
 EqualityExpression
     : RelationalExpression
-    | EqualityExpression "==" RelationalExpression
+    | EqualityExpression == RelationalExpression
         {
         }
-    | EqualityExpression "!=" RelationalExpression
+    | EqualityExpression != RelationalExpression
         {
         }
-    | EqualityExpression "===" RelationalExpression
+    | EqualityExpression === RelationalExpression
         {
         }
-    | EqualityExpression "!==" RelationalExpression
+    | EqualityExpression !== RelationalExpression
         {
         }
     ;
 
 EqualityExpressionNoIn
     : RelationalExpressionNoIn
-    | EqualityExpressionNoIn "==" RelationalExpressionNoIn
+    | EqualityExpressionNoIn == RelationalExpressionNoIn
         {
         }
-    | EqualityExpressionNoIn "!=" RelationalExpressionNoIn
+    | EqualityExpressionNoIn != RelationalExpressionNoIn
         {
         }
-    | EqualityExpressionNoIn "===" RelationalExpressionNoIn
+    | EqualityExpressionNoIn === RelationalExpressionNoIn
         {
         }
-    | EqualityExpressionNoIn "!==" RelationalExpressionNoIn
+    | EqualityExpressionNoIn !== RelationalExpressionNoIn
         {
         }
     ;
 
 EqualityExpressionNoBF
     : RelationalExpressionNoBF
-    | EqualityExpressionNoBF "==" RelationalExpression
+    | EqualityExpressionNoBF == RelationalExpression
         {
         }
-    | EqualityExpressionNoBF "!=" RelationalExpression
+    | EqualityExpressionNoBF != RelationalExpression
         {
         }
-    | EqualityExpressionNoBF "===" RelationalExpression
+    | EqualityExpressionNoBF === RelationalExpression
         {
         }
-    | EqualityExpressionNoBF "!==" RelationalExpression
+    | EqualityExpressionNoBF !== RelationalExpression
         {
         }
     ;
 
 BitwiseANDExpression
     : EqualityExpression
-    | BitwiseANDExpression "&" EqualityExpression
+    | BitwiseANDExpression & EqualityExpression
         {
         }
     ;
 
 BitwiseANDExpressionNoIn
     : EqualityExpressionNoIn
-    | BitwiseANDExpressionNoIn "&" EqualityExpressionNoIn
+    | BitwiseANDExpressionNoIn & EqualityExpressionNoIn
         {
         }
     ;
 
 BitwiseANDExpressionNoBF
     : EqualityExpressionNoBF
-    | BitwiseANDExpressionNoBF "&" EqualityExpression
+    | BitwiseANDExpressionNoBF & EqualityExpression
         {
         }
     ;
 
 BitwiseXORExpression
     : BitwiseANDExpression
-    | BitwiseXORExpression "^" BitwiseANDExpression
+    | BitwiseXORExpression ^ BitwiseANDExpression
         {
         }
     ;
 
 BitwiseXORExpressionNoIn
     : BitwiseANDExpressionNoIn
-    | BitwiseXORExpressionNoIn "^" BitwiseANDExpressionNoIn
+    | BitwiseXORExpressionNoIn ^ BitwiseANDExpressionNoIn
         {
         }
     ;
 
 BitwiseXORExpressionNoBF
     : BitwiseANDExpressionNoBF
-    | BitwiseXORExpressionNoBF "^" BitwiseANDExpression
+    | BitwiseXORExpressionNoBF ^ BitwiseANDExpression
         {
         }
     ;
 
 BitwiseORExpression
     : BitwiseXORExpression
-    | BitwiseORExpression "|" BitwiseXORExpression
+    | BitwiseORExpression | BitwiseXORExpression
         {
         }
     ;
 
 BitwiseORExpressionNoIn
     : BitwiseXORExpressionNoIn
-    | BitwiseORExpressionNoIn "|" BitwiseXORExpressionNoIn
+    | BitwiseORExpressionNoIn | BitwiseXORExpressionNoIn
         {
         }
     ;
 
 BitwiseORExpressionNoBF
     : BitwiseXORExpressionNoBF
-    | BitwiseORExpressionNoBF "|" BitwiseXORExpression
+    | BitwiseORExpressionNoBF | BitwiseXORExpression
         {
         }
     ;
 
 LogicalANDExpression
     : BitwiseORExpression
-    | LogicalANDExpression "&&" BitwiseORExpression
+    | LogicalANDExpression && BitwiseORExpression
         {
         }
     ;
 
 LogicalANDExpressionNoIn
     : BitwiseORExpressionNoIn
-    | LogicalANDExpressionNoIn "&&" BitwiseORExpressionNoIn
+    | LogicalANDExpressionNoIn && BitwiseORExpressionNoIn
         {
         }
     ;
 
 LogicalANDExpressionNoBF
     : BitwiseORExpressionNoBF
-    | LogicalANDExpressionNoBF "&&" BitwiseORExpression
+    | LogicalANDExpressionNoBF && BitwiseORExpression
         {
         }
     ;
 
 LogicalORExpression
     : LogicalANDExpression
-    | LogicalORExpression "||" LogicalANDExpression
+    | LogicalORExpression || LogicalANDExpression
         {
         }
     ;
 
 LogicalORExpressionNoIn
     : LogicalANDExpressionNoIn
-    | LogicalORExpressionNoIn "||" LogicalANDExpressionNoIn
+    | LogicalORExpressionNoIn || LogicalANDExpressionNoIn
         {
         }
     ;
 
 LogicalORExpressionNoBF
     : LogicalANDExpressionNoBF
-    | LogicalORExpressionNoBF "||" LogicalANDExpression
+    | LogicalORExpressionNoBF || LogicalANDExpression
         {
         }
     ;
 
 ConditionalExpression
     : LogicalORExpression
-    | LogicalORExpression "?" AssignmentExpression ":" AssignmentExpression
+    | LogicalORExpression ? AssignmentExpression : AssignmentExpression
         {
         }
     ;
 
 ConditionalExpressionNoIn
     : LogicalORExpressionNoIn
-    | LogicalORExpressionNoIn "?" AssignmentExpression ":" AssignmentExpressionNoIn
+    | LogicalORExpressionNoIn ? AssignmentExpression : AssignmentExpressionNoIn
         {
         }
     ;
 
 ConditionalExpressionNoBF
     : LogicalORExpressionNoBF
-    | LogicalORExpressionNoBF "?" AssignmentExpression ":" AssignmentExpression
+    | LogicalORExpressionNoBF ? AssignmentExpression : AssignmentExpression
         {
         }
     ;
 
 AssignmentExpression
     : ConditionalExpression
-    | LeftHandSideExpression "=" AssignmentExpression
+    | left_hand_side_expression = AssignmentExpression
         {
         }
-    | LeftHandSideExpression AssignmentOperator AssignmentExpression
+    | left_hand_side_expression AssignmentOperator AssignmentExpression
         {
         }
     ;
 
 AssignmentExpressionNoIn
     : ConditionalExpressionNoIn
-    | LeftHandSideExpression "=" AssignmentExpressionNoIn
+    | left_hand_side_expression = AssignmentExpressionNoIn
         {
         }
-    | LeftHandSideExpression AssignmentOperator AssignmentExpressionNoIn
+    | left_hand_side_expression AssignmentOperator AssignmentExpressionNoIn
         {
         }
     ;
 
 AssignmentExpressionNoBF
     : ConditionalExpressionNoBF
-    | LeftHandSideExpressionNoBF "=" AssignmentExpression
+    | LeftHandSideExpressionNoBF = AssignmentExpression
         {
         }
     | LeftHandSideExpressionNoBF AssignmentOperator AssignmentExpression
@@ -976,22 +976,22 @@ AssignmentExpressionNoBF
     ;
 
 AssignmentOperator
-    : "*="
-    | "/="
-    | "%="
-    | "+="
-    | "-="
-    | "<<="
-    | ">>="
-    | ">>>="
-    | "&="
-    | "^="
-    | "|="
+    : *=
+    | /=
+    | %=
+    | +=
+    | -=
+    | <<=
+    | >>=
+    | >>>=
+    | &=
+    | ^=
+    | |=
     ;
 
 Expression
     : AssignmentExpression
-    | Expression "," AssignmentExpression
+    | expression , AssignmentExpression
         {
 
         }
@@ -999,7 +999,7 @@ Expression
 
 ExpressionNoIn
     : AssignmentExpressionNoIn
-    | ExpressionNoIn "," AssignmentExpressionNoIn
+    | expressionNoIn , AssignmentExpressionNoIn
         {
 
         }
@@ -1007,7 +1007,7 @@ ExpressionNoIn
 
 ExpressionNoBF
     : AssignmentExpressionNoBF
-    | ExpressionNoBF "," AssignmentExpression
+    | expressionNoBF , AssignmentExpression
         {
         }
     ;
@@ -1021,82 +1021,82 @@ Literal
     ;
 
 NullLiteral
-    : "NULL"
+    : NULL
         {
         }
     ;
 
 BooleanLiteral
-    : "TRUE"
+    : TRUE
         {
         }
-    | "FALSE"
+    | FALSE
         {
         }
     ;
 
 NumericLiteral
-    : "NUMERIC_LITERAL"
+    : NUMERIC_LITERAL
         {
         }
     ;
 
 StringLiteral
-    : "STRING_LITERAL"
+    : STRING_LITERAL
         {
         }
     ;
 
 RegularExpressionLiteral
-    : RegularExpressionLiteralBegin "REGEXP_LITERAL"
+    : RegularExpressionLiteralBegin REGEXP_LITERAL
         {
         }
     ;
 
 RegularExpressionLiteralBegin
-    : "/"
+    : /
         {
         }
-    | "/="
+    | /=
         {
         }
     ;
 
 ReservedWord
-    : "BREAK"
-    | "CASE"
-    | "CATCH"
-    | "CONTINUE"
-    | "DEBUGGER"
-    | "DEFAULT"
-    | "DELETE"
-    | "DO"
-    | "ELSE"
-    | "FINALLY"
-    | "FOR"
-    | "FUNCTION"
-    | "IF"
-    | "IN"
-    | "INSTANCEOF"
-    | "NEW"
-    | "RETURN"
-    | "SWITCH"
-    | "THIS"
-    | "THROW"
-    | "TRY"
-    | "TYPEOF"
-    | "VAR"
-    | "VOID"
-    | "WHILE"
-    | "WITH"
-    | "TRUE"
-    | "FALSE"
-    | "NULL"
-    | "CLASS"
-    | "CONST"
-    | "ENUM"
-    | "EXPORT"
-    | "EXTENDS"
-    | "IMPORT"
-    | "SUPER"
+    : BREAK
+    | CASE
+    | CATCH
+    | CONTINUE
+    | DEBUGGER
+    | DEFAULT
+    | DELETE
+    | DO
+    | ELSE
+    | FINALLY
+    | FOR
+    | FUNCTION
+    | IF
+    | IN
+    | INSTANCEOF
+    | NEW
+    | RETURN
+    | SWITCH
+    | THIS
+    | THROW
+    | TRY
+    | TYPEOF
+    | VAR
+    | VOID
+    | WHILE
+    | WITH
+    | TRUE
+    | FALSE
+    | NULL
+    | CLASS
+    | CONST
+    | ENUM
+    | EXPORT
+    | EXTENDS
+    | IMPORT
+    | SUPER
     ;
