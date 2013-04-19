@@ -565,7 +565,7 @@ left_hand_side_expression
     | CallExpression
     ;
 
-LeftHandSideExpressionNoBF
+left_hand_side_expression_no_bf
     : new_expression_no_bf
     | call_expression_no_bf
     ;
@@ -581,289 +581,289 @@ PostfixExpression
     ;
 
 postfix_expression_no_bf
-    : LeftHandSideExpressionNoBF
-    | LeftHandSideExpressionNoBF PLUS2
+    : left_hand_side_expression_no_bf
+    | left_hand_side_expression_no_bf PLUS2
         {
         }
-    | LeftHandSideExpressionNoBF MINUS2
+    | left_hand_side_expression_no_bf MINUS2
         {
         }
     ;
 
-UnaryExpression
+unary_expression
     : PostfixExpression
-    | UnaryExpr
+    | unary_expr
     ;
 
 unary_expression_no_bf
     : postfix_expression_no_bf
-    | UnaryExpr
+    | unary_expr
     ;
 
-UnaryExpr
-    : DELETE UnaryExpression
+unary_expr
+    : DELETE unary_expression
         {
         }
-    | VOID UnaryExpression
+    | VOID unary_expression
         {
         }
-    | TYPEOF UnaryExpression
+    | TYPEOF unary_expression
         {
         }
-    | BR++ UnaryExpression
+    | BR++ unary_expression
         {
         }
-    | BR-- UnaryExpression
+    | BR-- unary_expression
         {
         }
-    | ++ UnaryExpression
+    | PLUS2 unary_expression
         {
         }
-    | -- UnaryExpression
+    | MINUS2 unary_expression
         {
         }
-    | + UnaryExpression
+    | PLUS unary_expression
         {
         }
-    | - UnaryExpression
+    | MINUS unary_expression
         {
         }
-    | ~ UnaryExpression
+    | TILDE unary_expression
         {
         }
-    | ! UnaryExpression
+    | EXCLAMATION unary_expression
         {
         }
     ;
 
-MultiplicativeExpression
-    : UnaryExpression
-    | MultiplicativeExpression * UnaryExpression
+multiplicative_expression
+    : unary_expression
+    | multiplicative_expression TIMES unary_expression
         {
         }
-    | MultiplicativeExpression / UnaryExpression
+    | multiplicative_expression DIVIDE unary_expression
         {
         }
-    | MultiplicativeExpression % UnaryExpression
+    | multiplicative_expression PERCENT unary_expression
         {
         }
     ;
 
 multiplicative_expression_no_bf
     : unary_expression_no_bf
-    | multiplicative_expression_no_bf * UnaryExpression
+    | multiplicative_expression_no_bf TIMES unary_expression
         {
         }
-    | multiplicative_expression_no_bf / UnaryExpression
+    | multiplicative_expression_no_bf DIVIDE unary_expression
         {
         }
-    | multiplicative_expression_no_bf % UnaryExpression
-        {
-        }
-    ;
-
-AdditiveExpression
-    : MultiplicativeExpression
-    | AdditiveExpression + MultiplicativeExpression
-        {
-        }
-    | AdditiveExpression - MultiplicativeExpression
+    | multiplicative_expression_no_bf PERCENT unary_expression
         {
         }
     ;
 
-AdditiveExpressionNoBF
+additive_expression
+    : multiplicative_expression
+    | additive_expression PLUS multiplicative_expression
+        {
+        }
+    | additive_expression MINUS multiplicative_expression
+        {
+        }
+    ;
+
+additive_expression_no_bf
     : multiplicative_expression_no_bf
-    | AdditiveExpressionNoBF + MultiplicativeExpression
+    | additive_expression_no_bf PLUS multiplicative_expression
         {
         }
-    | AdditiveExpressionNoBF - MultiplicativeExpression
-        {
-        }
-    ;
-
-ShiftExpression
-    : AdditiveExpression
-    | ShiftExpression << AdditiveExpression
-        {
-        }
-    | ShiftExpression >> AdditiveExpression
-        {
-        }
-    | ShiftExpression >>> AdditiveExpression
+    | additive_expression_no_bf MINUS multiplicative_expression
         {
         }
     ;
 
-ShiftExpressionNoBF
-    : AdditiveExpressionNoBF
-    | ShiftExpressionNoBF << AdditiveExpression
+shift_expression
+    : additive_expression
+    | shift_expression LSHIFT additive_expression
         {
         }
-    | ShiftExpressionNoBF >> AdditiveExpression
+    | shift_expression RSHIFT additive_expression
         {
         }
-    | ShiftExpressionNoBF >>> AdditiveExpression
-        {
-        }
-    ;
-
-RelationalExpression
-    : ShiftExpression
-    | RelationalExpression < ShiftExpression
-        {
-        }
-    | RelationalExpression > ShiftExpression
-        {
-        }
-    | RelationalExpression <= ShiftExpression
-        {
-        }
-    | RelationalExpression >= ShiftExpression
-        {
-        }
-    | RelationalExpression INSTANCEOF ShiftExpression
-        {
-        }
-    | RelationalExpression IN ShiftExpression
+    | shift_expression GT3 additive_expression
         {
         }
     ;
 
-RelationalExpressionNoIn
-    : ShiftExpression
-    | RelationalExpressionNoIn < ShiftExpression
+shift_expression_no_bf
+    : additive_expression_no_bf
+    | shift_expression_no_bf LSHIFT additive_expression
         {
         }
-    | RelationalExpressionNoIn > ShiftExpression
+    | shift_expression_no_bf RSHIFT additive_expression
         {
         }
-    | RelationalExpressionNoIn <= ShiftExpression
-        {
-        }
-    | RelationalExpressionNoIn >= ShiftExpression
-        {
-        }
-    | RelationalExpressionNoIn INSTANCEOF ShiftExpression
+    | shift_expression_no_bf GT3 additive_expression
         {
         }
     ;
 
-RelationalExpressionNoBF
-    : ShiftExpressionNoBF
-    | RelationalExpressionNoBF < ShiftExpression
+relational_expression
+    : shift_expression
+    | relational_expression LT shift_expression
         {
         }
-    | RelationalExpressionNoBF > ShiftExpression
+    | relational_expression GT shift_expression
         {
         }
-    | RelationalExpressionNoBF <= ShiftExpression
+    | relational_expression LTE shift_expression
         {
         }
-    | RelationalExpressionNoBF >= ShiftExpression
+    | relational_expression GTE shift_expression
         {
         }
-    | RelationalExpressionNoBF INSTANCEOF ShiftExpression
+    | relational_expression INSTANCEOF shift_expression
         {
         }
-    | RelationalExpressionNoBF IN ShiftExpression
-        {
-        }
-    ;
-
-EqualityExpression
-    : RelationalExpression
-    | EqualityExpression == RelationalExpression
-        {
-        }
-    | EqualityExpression != RelationalExpression
-        {
-        }
-    | EqualityExpression === RelationalExpression
-        {
-        }
-    | EqualityExpression !== RelationalExpression
+    | relational_expression IN shift_expression
         {
         }
     ;
 
-EqualityExpressionNoIn
-    : RelationalExpressionNoIn
-    | EqualityExpressionNoIn == RelationalExpressionNoIn
+relational_expression_no_in
+    : shift_expression
+    | relational_expression_no_in LT shift_expression
         {
         }
-    | EqualityExpressionNoIn != RelationalExpressionNoIn
+    | relational_expression_no_in GT shift_expression
         {
         }
-    | EqualityExpressionNoIn === RelationalExpressionNoIn
+    | relational_expression_no_in LTE shift_expression
         {
         }
-    | EqualityExpressionNoIn !== RelationalExpressionNoIn
+    | relational_expression_no_in GTE shift_expression
         {
         }
-    ;
-
-EqualityExpressionNoBF
-    : RelationalExpressionNoBF
-    | EqualityExpressionNoBF == RelationalExpression
-        {
-        }
-    | EqualityExpressionNoBF != RelationalExpression
-        {
-        }
-    | EqualityExpressionNoBF === RelationalExpression
-        {
-        }
-    | EqualityExpressionNoBF !== RelationalExpression
+    | relational_expression_no_in INSTANCEOF shift_expression
         {
         }
     ;
 
-BitwiseANDExpression
-    : EqualityExpression
-    | BitwiseANDExpression & EqualityExpression
+relational_expression_no_bf
+    : shift_expression_no_bf
+    | relational_expression_no_bf LT shift_expression
+        {
+        }
+    | relational_expression_no_bf GT shift_expression
+        {
+        }
+    | relational_expression_no_bf LTE shift_expression
+        {
+        }
+    | relational_expression_no_bf GTE shift_expression
+        {
+        }
+    | relational_expression_no_bf INSTANCEOF shift_expression
+        {
+        }
+    | relational_expression_no_bf IN shift_expression
         {
         }
     ;
 
-BitwiseANDExpressionNoIn
-    : EqualityExpressionNoIn
-    | BitwiseANDExpressionNoIn & EqualityExpressionNoIn
+equality_expression
+    : relational_expression
+    | equality_expression EQ2 relational_expression
+        {
+        }
+    | equality_expression NOT_EQ relational_expression
+        {
+        }
+    | equality_expression EQ3 relational_expression
+        {
+        }
+    | equality_expression NOT_EQ2 relational_expression
         {
         }
     ;
 
-BitwiseANDExpressionNoBF
-    : EqualityExpressionNoBF
-    | BitwiseANDExpressionNoBF & EqualityExpression
+equality_expression_no_in
+    : relational_expression_no_in
+    | equality_expression_no_in EQ2 relational_expression_no_in
+        {
+        }
+    | equality_expression_no_in NOT_EQ relational_expression_no_in
+        {
+        }
+    | equality_expression_no_in EQ3 relational_expression_no_in
+        {
+        }
+    | equality_expression_no_in NOT_EQ2 relational_expression_no_in
         {
         }
     ;
 
-BitwiseXORExpression
-    : BitwiseANDExpression
-    | BitwiseXORExpression ^ BitwiseANDExpression
+equality_expression_no_bf
+    : relational_expression_no_bf
+    | equality_expression_no_bf EQ2 relational_expression
+        {
+        }
+    | equality_expression_no_bf NOT_EQ relational_expression
+        {
+        }
+    | equality_expression_no_bf EQ3 relational_expression
+        {
+        }
+    | equality_expression_no_bf NOT_EQ2 relational_expression
+        {
+        }
+    ;
+
+bitwise_and_expression
+    : equality_expression
+    | bitwise_and_expression AMPER equality_expression
+        {
+        }
+    ;
+
+bitwise_and_expressionNoIn
+    : equality_expression_no_in
+    | bitwise_and_expression_no_in AMPER equality_expression_no_in
+        {
+        }
+    ;
+
+bitwise_and_expression_no_bf
+    : equality_expression_no_bf
+    | bitwise_and_expression_no_bf AMPER equality_expression
+        {
+        }
+    ;
+
+bitwise_xor_expression
+    : bitwise_and_expression
+    | bitwise_xor_expression CARET bitwise_and_expression
         {
         }
     ;
 
 bitwise_xor_expression_no_in
-    : BitwiseANDExpressionNoIn
-    | bitwise_xor_expression_no_in ^ BitwiseANDExpressionNoIn
+    : bitwise_and_expression_no_in
+    | bitwise_xor_expression_no_in CARET bitwise_and_expression_no_in
         {
         }
     ;
 
-BitwiseXORExpressionNoBF
-    : BitwiseANDExpressionNoBF
-    | BitwiseXORExpressionNoBF ^ BitwiseANDExpression
+bitwise_xor_expression_no_bf
+    : bitwise_and_expression_no_bf
+    | bitwise_xor_expression_no_bf CARET bitwise_and_expression
         {
         }
     ;
 
-BitwiseORExpression
-    : BitwiseXORExpression
-    | BitwiseORExpression PIPE BitwiseXORExpression
+bitwise_or_expression
+    : bitwise_xor_expression
+    | bitwise_or_expression PIPE bitwise_xor_expression
         {
         }
     ;
@@ -875,118 +875,118 @@ bitwise_or_expression_no_in
         }
     ;
 
-BitwiseORExpressionNoBF
-    : BitwiseXORExpressionNoBF
-    | BitwiseORExpressionNoBF PIPE BitwiseXORExpression
+bitwise_or_expression_no_bf
+    : bitwise_xor_expression_no_bf
+    | bitwise_or_expression_no_bf PIPE bitwise_xor_expression
         {
         }
     ;
 
-LogicalANDExpression
-    : BitwiseORExpression
-    | LogicalANDExpression AMPER2 BitwiseORExpression
+logical_and_expression
+    : bitwise_or_expression
+    | logical_and_expression AMPER2 bitwise_or_expression
         {
         }
     ;
 
-LogicalANDExpressionNoIn
+logical_and_expression_no_in
     : bitwise_or_expression_no_in
-    | LogicalANDExpressionNoIn AMPER2 bitwise_or_expression_no_in
+    | logical_and_expression_no_in AMPER2 bitwise_or_expression_no_in
         {
         }
     ;
 
-LogicalANDExpressionNoBF
-    : BitwiseORExpressionNoBF
-    | LogicalANDExpressionNoBF AMPER2 BitwiseORExpression
+logical_and_expression_no_bf
+    : bitwise_or_expression_no_bf
+    | logical_and_expression_no_bf AMPER2 bitwise_or_expression
         {
         }
     ;
 
-LogicalORExpression
-    : LogicalANDExpression
-    | LogicalORExpression PIPE2 LogicalANDExpression
+logical_or_expression
+    : logical_and_expression
+    | logical_or_expression PIPE2 logical_and_expression
         {
         }
     ;
 
 logical_or_expression_no_in
-    : LogicalANDExpressionNoIn
-    | logical_or_expression_no_in PIPE2 LogicalANDExpressionNoIn
+    : logical_and_expression_no_in
+    | logical_or_expression_no_in PIPE2 logical_and_expression_no_in
         {
         }
     ;
 
-LogicalORExpressionNoBF
-    : LogicalANDExpressionNoBF
-    | LogicalORExpressionNoBF PIPE2 LogicalANDExpression
+logical_or_expression_no_bf
+    : logical_and_expression_no_bf
+    | logical_or_expression_no_bf PIPE2 logical_and_expression
         {
         }
     ;
 
-ConditionalExpression
-    : LogicalORExpression
-    | LogicalORExpression ? assignment_expression : assignment_expression
+conditional_expression
+    : logical_or_expression
+    | logical_or_expression QUESTION assignment_expression COLON assignment_expression
         {
         }
     ;
 
-ConditionalExpressionNoIn
+conditional_expression_no_in
     : logical_or_expression_no_in
-    | logical_or_expression_no_in ? assignment_expression : assignment_expression_no_in
+    | logical_or_expression_no_in QUESTION assignment_expression COLON assignment_expression_no_in
         {
         }
     ;
 
 conditional_expression_no_bf
-    : LogicalORExpressionNoBF
-    | LogicalORExpressionNoBF ? assignment_expression : assignment_expression
+    : logical_or_expression_no_bf
+    | logical_or_expression_no_bf QUESTION assignment_expression COLON assignment_expression
         {
         }
     ;
 
 assignment_expression
-    : ConditionalExpression
-    | left_hand_side_expression = assignment_expression
+    : conditional_expression
+    | left_hand_side_expression EQ assignment_expression
         {
         }
-    | left_hand_side_expression AssignmentOperator assignment_expression
+    | left_hand_side_expression assignment_operator assignment_expression
         {
         }
     ;
 
 assignment_expression_no_in
-    : ConditionalExpressionNoIn
-    | left_hand_side_expression = assignment_expression_no_in
+    : conditional_expression_no_in
+    | left_hand_side_expression EQ assignment_expression_no_in
         {
         }
-    | left_hand_side_expression AssignmentOperator assignment_expression_no_in
+    | left_hand_side_expression assignment_operator assignment_expression_no_in
         {
         }
     ;
 
 assignment_expression_no_bf
     : conditional_expression_no_bf
-    | LeftHandSideExpressionNoBF = assignment_expression
+    | left_hand_side_expression_no_bf EQ assignment_expression
         {
         }
-    | LeftHandSideExpressionNoBF AssignmentOperator assignment_expression
+    | left_hand_side_expression_no_bf assignment_operator assignment_expression
         {
         }
     ;
 
-AssignmentOperator
-    : *=
-    | /=
-    | %=
-    | +=
-    | -=
-    | <<=
-    | >>=
-    | >>>=
-    | &=
-    | ^=
-    | |=
+assignment_operator
+    : TIMES_EQ
+    | DIVIDE_EQ
+    | PERCENT_EQ
+    | PLUS_EQ
+    | MINUS_EQ
+    | LSHIFT_EQ
+    | RSHIFT_EQ
+    | GT3_Eq
+    | AMPER_EQ
+    | CARET_EQ
+    | PIPE_EQ
     ;
 
 Expression
@@ -1054,10 +1054,10 @@ regular_expression_literal
     ;
 
 regular_expression_literal_begin
-    : /
+    : DIVIDE
         {
         }
-    | /=
+    | DIVIDE_EQ
         {
         }
     ;
