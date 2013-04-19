@@ -153,12 +153,12 @@ int line = 1;
 "null" {count();yylvalp->t=new Terminal(name2id["NUL"],yytext,line);return (NUL);}
 "true" {count();yylvalp->t=new Terminal(name2id["TRU"],yytext,line);return (TRU);}
 "false" {count();yylvalp->t=new Terminal(name2id["FALS"],yytext,line);return (FALS);}
-{StringLiteral} {count();yylvalp->t=new Terminal(name2id["STRING_LIT"],yytext,line);return(STRING_LIT); }
+{StringLiteral} {count();yylvalp->t=new Terminal(name2id["STRING_LITERAL"],yytext,line);return(STRING_LITERAL); }
 {Identifier} {count();yylvalp->t=new Terminal(name2id["IDENTIFIER"],yytext,line);return(IDENTIFIER); }
 "'"[^ \r\n\t]*"'" {count();yylvalp->t=new Terminal(name2id["CHAR_LIT"],yytext,line);return(CHAR_LIT); }
-{DecimalLiteral} {count();yylvalp->t=new Terminal(name2id["NUMERIC_LIT"],yytext,line);return(NUMERIC_LIT); }
-{HexIntegerLiteral} {count();yylvalp->t=new Terminal(name2id["NUMERIC_LIT"],yytext,line);return(NUMERIC_LIT); 
-{OctalIntegerLiteral} {count();yylvalp->t=new Terminal(name2id["NUMERIC_LIT"],yytext,line);return(NUMERIC_LIT); 
+{DecimalLiteral} {count();yylvalp->t=new Terminal(name2id["NUMERIC_LITERAL"],yytext,line);return(NUMERIC_LITERAL); }
+{HexIntegerLiteral} {count();yylvalp->t=new Terminal(name2id["NUMERIC_LITERAL"],yytext,line);return(NUMERIC_LITERAL); 
+{OctalIntegerLiteral} {count();yylvalp->t=new Terminal(name2id["NUMERIC_LITERAL"],yytext,line);return(NUMERIC_LITERAL); 
 ([ \t\v\n\r])+ {count();}
 . {count();} 
 %% 
