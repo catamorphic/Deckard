@@ -51,7 +51,7 @@ variable_declaration_list_no_in
     : variable_declaration_list_no_in
         {
         }
-    | variable_declaration_list_no_in , variable_declaration_no_in
+    | variable_declaration_list_no_in COMMA variable_declaration_no_in
         {
         }
     ;
@@ -93,7 +93,7 @@ empty_statement
     ;
 
 expression_statement
-    : expression_no_bf ;
+    : expression_no_bf SEMI
         {
         }
     | expression_no_bf error
@@ -147,13 +147,13 @@ iteration_statement
     | FOR LPAREN VAR variable_declaration_list_no_in SEMI expression SEMI expression RPAREN statement
         {
         }
-    | FOR LPAREN VAR variable_declaration_list_no_in ; expression ; RPAREN statement
+    | FOR LPAREN VAR variable_declaration_list_no_in SEMI expression SEMI RPAREN statement
         {
         }
-    | FOR LPAREN VAR variable_declaration_list_no_in ; ; expression RPAREN statement
+    | FOR LPAREN VAR variable_declaration_list_no_in SEMI SEMI expression RPAREN statement
         {
         }
-    | FOR LPAREN VAR variable_declaration_list_no_in ; ; RPAREN statement
+    | FOR LPAREN VAR variable_declaration_list_no_in SEMI SEMI RPAREN statement
         {
         }
     | FOR LPAREN left_hand_side_expression IN expression RPAREN statement
@@ -222,10 +222,10 @@ switch_statement
     ;
 
 case_block
-    : { case_clases }
+    : LBRACE case_clases RBRACE
         {
         }
-    | { case_clases default_clause case_clases }
+    | LBRACE case_clases default_clause case_clases RBRACE
         {
         }
     ;
@@ -258,7 +258,7 @@ labelled_statement
     ;
 
 throw_statement
-    : THROW expression ;
+    : THROW expression SEMI
         {
         }
     | THROW expression error
@@ -291,7 +291,7 @@ finally
     ;
 
 debugger_statement
-    : DEBUGGER ;
+    : DEBUGGER SEMI
         {
         }
     | DEBUGGER error
@@ -300,50 +300,50 @@ debugger_statement
     ;
 
 function_declaration
-    : FUNCTION IDENTIFIER LPAREN RPAREN { function_body }
+    : FUNCTION IDENTIFIER LPAREN RPAREN LBRACE function_body RBRACE
         {
         }
-    | FUNCTION IDENTIFIER LPAREN FormalParameterList RPAREN { function_body }
-        {
-        }
-    ;
-
-FunctionExpression
-    : FUNCTION IDENTIFIER LPAREN RPAREN { function_body }
-        {
-        }
-    | FUNCTION IDENTIFIER LPAREN FormalParameterList RPAREN { function_body }
-        {
-        }
-    | FUNCTION LPAREN RPAREN { function_body }
-        {
-        }
-    | FUNCTION LPAREN FormalParameterList RPAREN { function_body }
+    | FUNCTION IDENTIFIER LPAREN formal_parameter_list RPAREN LBRACE function_body RBRACE
         {
         }
     ;
 
-FormalParameterList
+function_expression
+    : FUNCTION IDENTIFIER LPAREN RPAREN LBRACE function_body RBRACE
+        {
+        }
+    | FUNCTION IDENTIFIER LPAREN formal_parameter_list RPAREN LBRACE function_body RBRACE
+        {
+        }
+    | FUNCTION LPAREN RPAREN LBRACE function_body RBRACE
+        {
+        }
+    | FUNCTION LPAREN formal_parameter_list RPAREN LBRACE function_body RBRACE
+        {
+        }
+    ;
+
+formal_parameter_list
     : IDENTIFIER
         {
         }
-    | FormalParameterList , IDENTIFIER
+    | formal_parameter_list COMMA IDENTIFIER
         {
         }
     ;
 
 function_body
-    : SourceElements
+    : source_elements
     ;
 
-Program
-    : SourceElements EOF
+program
+    : source_elements EOF
         {
         }
     ;
 
-SourceElements
-    : SourceElements SourceElement
+source_elements
+    : source_elements source_element
         {
         }
     |
@@ -351,241 +351,241 @@ SourceElements
         }
     ;
 
-SourceElement
+source_element
     : statement
     | function_declaration
     ;
 
-PrimaryExpression
-    : PrimaryExpressionNoBrace
-    | ObjectLiteral
+primary_expression
+    : primary_expression_no_brace
+    | object_literal
     ;
 
-PrimaryExpressionNoBrace
+primary_expression_no_brace
     : THIS
         {
         }
     | IDENTIFIER
         {
         }
-    | Literal
-    | ArrayLiteral
+    | literal
+    | array_literal
     | LPAREN expression RPAREN
         {
         }
     ;
 
-ArrayLiteral
-    : [ ]
+array_literal
+    : LBRACK RBRACK
         {
         }
-    | [ Elision ]
+    | LBRACK elision RBRACK
         {
         }
-    | [ ElementList ]
+    | LBRACK ElementList RBRACK
         {
         }
-    | [ ElementList , ]
+    | LBRACK ElementList COMMA RBRACK
         {
         }
-    | [ ElementList , Elision ]
+    | LBRACK ElementList COMMA elision RBRACK
         {
         }
     ;
 
 ElementList
-    : AssignmentExpression
+    : assignment_expression
         {
         }
-    | Elision AssignmentExpression
+    | elision assignment_expression
         {
         }
-    | ElementList , AssignmentExpression
+    | ElementList COMMA assignment_expression
         {
         }
-    | ElementList , Elision AssignmentExpression
-        {
-        }
-    ;
-
-Elision
-    : ,
-        {
-        }
-    | Elision ,
+    | ElementList COMMA elision assignment_expression
         {
         }
     ;
 
-ObjectLiteral
-    : { }
+elision
+    : COMMA
         {
         }
-    | { PropertyNameAndValueList }
-        {
-        }
-    | { PropertyNameAndValueList , }
+    | elision COMMA
         {
         }
     ;
 
-PropertyNameAndValueList
-    : PropertyAssignment
+object_literal
+    : LBRACE RBRACE
         {
         }
-    | PropertyNameAndValueList , PropertyAssignment
+    | LBRACE property_name_and_value_list RBRACE
         {
         }
-    ;
-
-PropertyAssignment
-    : PropertyName : AssignmentExpression
-        {
-        }
-    | IDENTIFIER PropertyName LPAREN RPAREN { function_body }
-        {
-        }
-    | IDENTIFIER PropertyName LPAREN PropertySetParameterList RPAREN { function_body }
+    | LBRACE property_name_and_value_list COMMA RBRACE
         {
         }
     ;
 
-PropertyName
-    : IdentifierName
-    | StringLiteral
-    | NumericLiteral
+property_name_and_value_list
+    : property_assignment
+        {
+        }
+    | property_name_and_value_list COMMA property_assignment
+        {
+        }
     ;
 
-PropertySetParameterList
+property_assignment
+    : property_name COLON assignment_expression
+        {
+        }
+    | IDENTIFIER property_name LPAREN RPAREN LBRACE function_body RBRACE
+        {
+        }
+    | IDENTIFIER property_name LPAREN property_set_parameter_list RPAREN LBRACE function_body RBRACE
+        {
+        }
+    ;
+
+property_name
+    : identifier_name
+    | string_literal
+    | numeric_literal
+    ;
+
+property_set_parameter_list
     : IDENTIFIER
         {
         }
     ;
 
-MemberExpression
-    : PrimaryExpression
-    | FunctionExpression
-    | MemberExpression [ expression ]
+member_expression
+    : primary_expression
+    | function_expression
+    | member_expression LBRACK expression RBRACK
         {
         }
-    | MemberExpression . IdentifierName
+    | member_expression DOT identifier_name
         {
         }
-    | NEW MemberExpression Arguments
-        {
-        }
-    ;
-
-MemberExpressionNoBF
-    : PrimaryExpressionNoBrace
-    | MemberExpressionNoBF [ expression ]
-        {
-        }
-    | MemberExpressionNoBF . IdentifierName
-        {
-        }
-    | NEW MemberExpression Arguments
+    | NEW member_expression arguments
         {
         }
     ;
 
-NewExpression
-    : MemberExpression
-    | NEW NewExpression
+member_expression_no_bf
+    : primary_expression_no_brace
+    | member_expression_no_bf LBRACK expression RBRACK
+        {
+        }
+    | member_expression_no_bf DOT identifier_name
+        {
+        }
+    | NEW member_expression arguments
         {
         }
     ;
 
-NewExpressionNoBF
-    : MemberExpressionNoBF
-    | NEW NewExpression
+new_expression
+    : member_expression
+    | NEW new_expression
         {
         }
     ;
 
-CallExpression
-    : MemberExpression Arguments
-        {
-        }
-    | CallExpression Arguments
-        {
-        }
-    | CallExpression [ expression ]
-        {
-        }
-    | CallExpression . IdentifierName
+new_expression_no_bf
+    : member_expression_no_bf
+    | NEW new_expression
         {
         }
     ;
 
-CallExpressionNoBF
-    : MemberExpressionNoBF Arguments
+call_expression
+    : member_expression arguments
         {
         }
-    | CallExpressionNoBF Arguments
+    | call_expression arguments
         {
         }
-    | CallExpressionNoBF [ expression ]
+    | call_expression LBRACK expression RBRACK
         {
         }
-    | CallExpressionNoBF . IdentifierName
+    | call_expression DOT identifier_name
         {
         }
     ;
 
-IdentifierName
+call_expression_no_bf
+    : member_expression_no_bf arguments
+        {
+        }
+    | call_expression_no_bf arguments
+        {
+        }
+    | call_expression_no_bf LBRACK expression RBRACK
+        {
+        }
+    | call_expression_no_bf DOT identifier_name
+        {
+        }
+    ;
+
+identifier_name
     : IDENTIFIER
         {
         }
-    | ReservedWord
+    | reserved_word
         {
         }
     ;
 
-Arguments
+arguments
     : LPAREN RPAREN
         {
         }
-    | LPAREN ArgumentList RPAREN
+    | LPAREN argument_list RPAREN
         {
         }
     ;
 
-ArgumentList
-    : AssignmentExpression
+argument_list
+    : assignment_expression
         {
         }
-    | ArgumentList , AssignmentExpression
+    | argument_list COMMA assignment_expression
         {
         }
     ;
 
 left_hand_side_expression
-    : NewExpression
+    : new_expression
     | CallExpression
     ;
 
 LeftHandSideExpressionNoBF
-    : NewExpressionNoBF
-    | CallExpressionNoBF
+    : new_expression_no_bf
+    | call_expression_no_bf
     ;
 
 PostfixExpression
     : left_hand_side_expression
-    | left_hand_side_expression ++
+    | left_hand_side_expression PLUS2
         {
         }
-    | left_hand_side_expression --
+    | left_hand_side_expression MINUS2
         {
         }
     ;
 
-PostfixExpressionNoBF
+postfix_expression_no_bf
     : LeftHandSideExpressionNoBF
-    | LeftHandSideExpressionNoBF ++
+    | LeftHandSideExpressionNoBF PLUS2
         {
         }
-    | LeftHandSideExpressionNoBF --
+    | LeftHandSideExpressionNoBF MINUS2
         {
         }
     ;
@@ -595,8 +595,8 @@ UnaryExpression
     | UnaryExpr
     ;
 
-UnaryExpressionNoBF
-    : PostfixExpressionNoBF
+unary_expression_no_bf
+    : postfix_expression_no_bf
     | UnaryExpr
     ;
 
@@ -649,15 +649,15 @@ MultiplicativeExpression
         }
     ;
 
-MultiplicativeExpressionNoBF
-    : UnaryExpressionNoBF
-    | MultiplicativeExpressionNoBF * UnaryExpression
+multiplicative_expression_no_bf
+    : unary_expression_no_bf
+    | multiplicative_expression_no_bf * UnaryExpression
         {
         }
-    | MultiplicativeExpressionNoBF / UnaryExpression
+    | multiplicative_expression_no_bf / UnaryExpression
         {
         }
-    | MultiplicativeExpressionNoBF % UnaryExpression
+    | multiplicative_expression_no_bf % UnaryExpression
         {
         }
     ;
@@ -673,7 +673,7 @@ AdditiveExpression
     ;
 
 AdditiveExpressionNoBF
-    : MultiplicativeExpressionNoBF
+    : multiplicative_expression_no_bf
     | AdditiveExpressionNoBF + MultiplicativeExpression
         {
         }
@@ -847,9 +847,9 @@ BitwiseXORExpression
         }
     ;
 
-BitwiseXORExpressionNoIn
+bitwise_xor_expression_no_in
     : BitwiseANDExpressionNoIn
-    | BitwiseXORExpressionNoIn ^ BitwiseANDExpressionNoIn
+    | bitwise_xor_expression_no_in ^ BitwiseANDExpressionNoIn
         {
         }
     ;
@@ -863,114 +863,114 @@ BitwiseXORExpressionNoBF
 
 BitwiseORExpression
     : BitwiseXORExpression
-    | BitwiseORExpression | BitwiseXORExpression
+    | BitwiseORExpression PIPE BitwiseXORExpression
         {
         }
     ;
 
-BitwiseORExpressionNoIn
-    : BitwiseXORExpressionNoIn
-    | BitwiseORExpressionNoIn | BitwiseXORExpressionNoIn
+bitwise_or_expression_no_in
+    : bitwise_xor_expression_no_in
+    | bitwise_or_expression_no_in PIPE bitwise_xor_expression_no_in
         {
         }
     ;
 
 BitwiseORExpressionNoBF
     : BitwiseXORExpressionNoBF
-    | BitwiseORExpressionNoBF | BitwiseXORExpression
+    | BitwiseORExpressionNoBF PIPE BitwiseXORExpression
         {
         }
     ;
 
 LogicalANDExpression
     : BitwiseORExpression
-    | LogicalANDExpression && BitwiseORExpression
+    | LogicalANDExpression AMPER2 BitwiseORExpression
         {
         }
     ;
 
 LogicalANDExpressionNoIn
-    : BitwiseORExpressionNoIn
-    | LogicalANDExpressionNoIn && BitwiseORExpressionNoIn
+    : bitwise_or_expression_no_in
+    | LogicalANDExpressionNoIn AMPER2 bitwise_or_expression_no_in
         {
         }
     ;
 
 LogicalANDExpressionNoBF
     : BitwiseORExpressionNoBF
-    | LogicalANDExpressionNoBF && BitwiseORExpression
+    | LogicalANDExpressionNoBF AMPER2 BitwiseORExpression
         {
         }
     ;
 
 LogicalORExpression
     : LogicalANDExpression
-    | LogicalORExpression || LogicalANDExpression
+    | LogicalORExpression PIPE2 LogicalANDExpression
         {
         }
     ;
 
-LogicalORExpressionNoIn
+logical_or_expression_no_in
     : LogicalANDExpressionNoIn
-    | LogicalORExpressionNoIn || LogicalANDExpressionNoIn
+    | logical_or_expression_no_in PIPE2 LogicalANDExpressionNoIn
         {
         }
     ;
 
 LogicalORExpressionNoBF
     : LogicalANDExpressionNoBF
-    | LogicalORExpressionNoBF || LogicalANDExpression
+    | LogicalORExpressionNoBF PIPE2 LogicalANDExpression
         {
         }
     ;
 
 ConditionalExpression
     : LogicalORExpression
-    | LogicalORExpression ? AssignmentExpression : AssignmentExpression
+    | LogicalORExpression ? assignment_expression : assignment_expression
         {
         }
     ;
 
 ConditionalExpressionNoIn
-    : LogicalORExpressionNoIn
-    | LogicalORExpressionNoIn ? AssignmentExpression : AssignmentExpressionNoIn
+    : logical_or_expression_no_in
+    | logical_or_expression_no_in ? assignment_expression : assignment_expression_no_in
         {
         }
     ;
 
-ConditionalExpressionNoBF
+conditional_expression_no_bf
     : LogicalORExpressionNoBF
-    | LogicalORExpressionNoBF ? AssignmentExpression : AssignmentExpression
+    | LogicalORExpressionNoBF ? assignment_expression : assignment_expression
         {
         }
     ;
 
-AssignmentExpression
+assignment_expression
     : ConditionalExpression
-    | left_hand_side_expression = AssignmentExpression
+    | left_hand_side_expression = assignment_expression
         {
         }
-    | left_hand_side_expression AssignmentOperator AssignmentExpression
+    | left_hand_side_expression AssignmentOperator assignment_expression
         {
         }
     ;
 
-AssignmentExpressionNoIn
+assignment_expression_no_in
     : ConditionalExpressionNoIn
-    | left_hand_side_expression = AssignmentExpressionNoIn
+    | left_hand_side_expression = assignment_expression_no_in
         {
         }
-    | left_hand_side_expression AssignmentOperator AssignmentExpressionNoIn
+    | left_hand_side_expression AssignmentOperator assignment_expression_no_in
         {
         }
     ;
 
-AssignmentExpressionNoBF
-    : ConditionalExpressionNoBF
-    | LeftHandSideExpressionNoBF = AssignmentExpression
+assignment_expression_no_bf
+    : conditional_expression_no_bf
+    | LeftHandSideExpressionNoBF = assignment_expression
         {
         }
-    | LeftHandSideExpressionNoBF AssignmentOperator AssignmentExpression
+    | LeftHandSideExpressionNoBF AssignmentOperator assignment_expression
         {
         }
     ;
@@ -990,70 +990,70 @@ AssignmentOperator
     ;
 
 Expression
-    : AssignmentExpression
-    | expression , AssignmentExpression
+    : assignment_expression
+    | expression COMMA assignment_expression
         {
 
         }
     ;
 
 ExpressionNoIn
-    : AssignmentExpressionNoIn
-    | expressionNoIn , AssignmentExpressionNoIn
+    : assignment_expression_no_in
+    | expressionNoIn COMMA assignment_expression_no_in
         {
 
         }
     ;
 
 ExpressionNoBF
-    : AssignmentExpressionNoBF
-    | expressionNoBF , AssignmentExpression
+    : assignment_expression_no_bf
+    | expressionNoBF COMMA assignment_expression
         {
         }
     ;
 
-Literal
-    : NullLiteral
-    | BooleanLiteral
-    | NumericLiteral
-    | StringLiteral
-    | RegularExpressionLiteral
+literal
+    : null_literal
+    | boolean_literal
+    | numeric_literal
+    | string_literal
+    | regular_expression_literal
     ;
 
-NullLiteral
-    : NULL
+null_literal
+    : NUL
         {
         }
     ;
 
-BooleanLiteral
-    : TRUE
+boolean_literal
+    : TRU
         {
         }
-    | FALSE
+    | FALS
         {
         }
     ;
 
-NumericLiteral
+numeric_literal
     : NUMERIC_LITERAL
         {
         }
     ;
 
-StringLiteral
+string_literal
     : STRING_LITERAL
         {
         }
     ;
 
-RegularExpressionLiteral
-    : RegularExpressionLiteralBegin REGEXP_LITERAL
+regular_expression_literal
+    : regular_expression_literal_begin REGEXP_LITERAL
         {
         }
     ;
 
-RegularExpressionLiteralBegin
+regular_expression_literal_begin
     : /
         {
         }
@@ -1062,7 +1062,7 @@ RegularExpressionLiteralBegin
         }
     ;
 
-ReservedWord
+reserved_word
     : BREAK
     | CASE
     | CATCH
@@ -1089,9 +1089,9 @@ ReservedWord
     | VOID
     | WHILE
     | WITH
-    | TRUE
-    | FALSE
-    | NULL
+    | TRU
+    | FALS
+    | NUL
     | CLASS
     | CONST
     | ENUM
