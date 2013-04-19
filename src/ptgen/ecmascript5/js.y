@@ -610,10 +610,10 @@ unary_expr
     | TYPEOF unary_expression
         {
         }
-    | BR++ unary_expression
+    | BR_PLUS2 unary_expression
         {
         }
-    | BR-- unary_expression
+    | BR_MINUS2 unary_expression
         {
         }
     | PLUS2 unary_expression
