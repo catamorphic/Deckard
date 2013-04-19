@@ -1,3 +1,8 @@
+program
+    : source_elements
+        {
+        }
+    ;
 
 statement
     : block
@@ -334,12 +339,6 @@ formal_parameter_list
 
 function_body
     : source_elements
-    ;
-
-program
-    : source_elements EOF
-        {
-        }
     ;
 
 source_elements
