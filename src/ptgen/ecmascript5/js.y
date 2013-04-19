@@ -382,28 +382,28 @@ array_literal
     | LBRACK elision RBRACK
         {
         }
-    | LBRACK ElementList RBRACK
+    | LBRACK element_list RBRACK
         {
         }
-    | LBRACK ElementList COMMA RBRACK
+    | LBRACK element_list COMMA RBRACK
         {
         }
-    | LBRACK ElementList COMMA elision RBRACK
+    | LBRACK element_list COMMA elision RBRACK
         {
         }
     ;
 
-ElementList
+element_list
     : assignment_expression
         {
         }
     | elision assignment_expression
         {
         }
-    | ElementList COMMA assignment_expression
+    | element_list COMMA assignment_expression
         {
         }
-    | ElementList COMMA elision assignment_expression
+    | element_list COMMA elision assignment_expression
         {
         }
     ;
@@ -562,7 +562,7 @@ argument_list
 
 left_hand_side_expression
     : new_expression
-    | CallExpression
+    | call_expression
     ;
 
 left_hand_side_expression_no_bf
@@ -570,7 +570,7 @@ left_hand_side_expression_no_bf
     | call_expression_no_bf
     ;
 
-PostfixExpression
+postfix_expression
     : left_hand_side_expression
     | left_hand_side_expression PLUS2
         {
@@ -591,7 +591,7 @@ postfix_expression_no_bf
     ;
 
 unary_expression
-    : PostfixExpression
+    : postfix_expression
     | unary_expr
     ;
 
@@ -826,7 +826,7 @@ bitwise_and_expression
         }
     ;
 
-bitwise_and_expressionNoIn
+bitwise_and_expression_no_in
     : equality_expression_no_in
     | bitwise_and_expression_no_in AMPER equality_expression_no_in
         {
@@ -997,17 +997,17 @@ Expression
         }
     ;
 
-ExpressionNoIn
+expression_no_in
     : assignment_expression_no_in
-    | expressionNoIn COMMA assignment_expression_no_in
+    | expression_no_in COMMA assignment_expression_no_in
         {
 
         }
     ;
 
-ExpressionNoBF
+expression_no_bf
     : assignment_expression_no_bf
-    | expressionNoBF COMMA assignment_expression
+    | expression_no_bf COMMA assignment_expression
         {
         }
     ;
