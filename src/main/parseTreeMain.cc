@@ -44,10 +44,14 @@ map<int,string> id2name;
 #ifdef JAVA
 string identifierTypeName = "ID_TK";
 #else
+#ifdef JS
+string identifierTypeName = "IDENTIFIER";
+#else
 #ifdef PHP
 string identifierTypeName = "T_VARIABLE";
 #else
 string identifierTypeName = "IDENTIFIER";
+#endif
 #endif
 #endif
 

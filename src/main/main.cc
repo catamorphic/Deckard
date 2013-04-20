@@ -53,10 +53,14 @@ map<int,string> id2name;
 #ifdef JAVA
 string identifierTypeName = "ID_TK";
 #else
+#ifdef JS
+string identifierTypeName = "IDENTIFIER";
+#else
 #ifdef PHP
 string identifierTypeName = "T_VARIABLE";
 #else
 string identifierTypeName = "IDENTIFIER";
+#endif
 #endif
 #endif
 
@@ -72,10 +76,14 @@ static const char *relNodes[] = {
 #ifdef JAVA 
 #include "../ptgen/java/jrelevantNodes.h"
 #else
+#ifdef JS
+#include "../ptgen/ecmascript5/jsrelevantNodes.h"
+#else
 #ifdef PHP
 #include "../ptgen/php5/phprelevantNodes.h"
 #else
 #include "../ptgen/gcc/crelevantNodes.h"
+#endif
 #endif
 #endif
 };
@@ -84,10 +92,14 @@ static const char *atomicNodes[] = {
 #ifdef JAVA
 #include "../ptgen/java/jatomicNodes.h"
 #else
+#ifdef JS
+#include "../ptgen/ecmascript5/jsatomicNodes.h"
+#else
 #ifdef PHP
 #include "../ptgen/php5/phpatomicNodes.h"
 #else
 #include "../ptgen/gcc/catomicNodes.h"
+#endif
 #endif
 #endif
 };
@@ -96,10 +108,14 @@ static const char *valParents[] = {
 #ifdef JAVA
 #include "../ptgen/java/jparentNodes.h"
 #else
+#ifdef JS
+#include "../ptgen/ecmascript5/jsparentNodes.h"
+#else
 #ifdef PHP
 #include "../ptgen/php5/phpparentNodes.h"
 #else
 #include "../ptgen/gcc/cparentNodes.h"
+#endif
 #endif
 #endif
 };

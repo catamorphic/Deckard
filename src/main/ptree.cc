@@ -510,7 +510,11 @@ static const char * contextualNodes[] = {
 #ifdef PHP
 #include "../ptgen/php5/phpcontextualNodes.h"
 #else
+#ifdef JS
+#include "../ptgen/ecmascript5/jscontextualNodes.h"
+#else
 #include "../ptgen/gcc/ccontextualNodes.h"
+#endif
 #endif
 #endif
 };

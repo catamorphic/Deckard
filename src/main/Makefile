@@ -41,13 +41,16 @@ TREESRC=ptree.cc
 CTREEOBJS=ptreeC.o
 JTREEOBJS=ptreeJ.o
 PHPTREEOBJS=ptreePHP.o
+JSTREEOBJS=ptreeJS.o
 
 CVGENOBJS=${CTREEOBJS} ../vgen/treeTra/libvgen.a  # TODO: libvgen may also be language dependent, especially the parts that involve "contextual nodes" (e.g., bugfinding, context locating code)
 # A better architecture would make 'vgen' language independent, put all language-dependent code into ptgen/ptree but provide a language-independent interface for accessing tree structures;
 # 'bugfinding' (the buggy code scoring algorithm in particular) should also be language-independent, accessing language-dependent tree structures only through a language-independent interface.
 JVGENOBJS=${JTREEOBJS} ../vgen/treeTra/libvgen.a
 PHPVGENOBJS=${PHPTREEOBJS} ../vgen/treeTra/libvgen.a
+JSVGENOBJS=${JSTREEOBJS} ../vgen/treeTra/libvgen.a
 
+JSOBJS=${JSVGENOBJS} ../ptgen/ecmascript5/jsptgen.a
 COBJS=${CVGENOBJS} ../ptgen/gcc/gccptgen.a
 JOBJS=${JVGENOBJS} ../ptgen/java/javaptgen.a
 PHPOBJS=${PHPVGENOBJS} ../ptgen/php5/phpptgen.a
@@ -55,6 +58,7 @@ PHPOBJS=${PHPVGENOBJS} ../ptgen/php5/phpptgen.a
 CHEADERS=../ptgen/gcc/crelevantNodes.h ../ptgen/gcc/catomicNodes.h ../ptgen/gcc/cparentNodes.h ../ptgen/gcc/ccontextualNodes.h
 JHEADERS=../ptgen/java/jrelevantNodes.h ../ptgen/java/jatomicNodes.h ../ptgen/java/jparentNodes.h ../ptgen/java/jcontextualNodes.h
 PHPHEADERS=../ptgen/php5/phprelevantNodes.h ../ptgen/php5/phpatomicNodes.h ../ptgen/php5/phpparentNodes.h ../ptgen/php5/phpcontextualNodes.h
+JSHEADERS=../ptgen/ecmascript5/jsrelevantNodes.h ../ptgen/ecmascript5/jsatomicNodes.h ../ptgen/ecmascript5/jsparentNodes.h ../ptgen/ecmascript5/jscontextualNodes.h
 
 CC=g++
 CXX=g++ 
@@ -63,7 +67,7 @@ CFLAGS+=$(DEBUGFLAGS)
 CXXFLAGS+=$(DEBUGFLAGS)
 LDFLAGS+=$(DEBUGFLAGS)
 
-EXES=cvecgen jvecgen cbugfilters jbugfilters out2html \
+EXES=cvecgen jvecgen jsvecgen cbugfilters jbugfilters out2html \
      phpvecgen phpbugfilters out2xml \
      cParseTreeMain jParseTreeMain phpParseTreeMain
 
@@ -79,6 +83,9 @@ ${CTREEOBJS}:${TREESRC} ${TREEHEADER}
 ${JTREEOBJS}:${TREESRC} ${TREEHEADER}
 	$(CXX) -o $@ $(CXXFLAGS) $(CPPFLAGS) -c -DJAVA ${TREESRC}
 
+${JSTREEOBJS}:${TREESRC} ${TREEHEADER}
+	$(CXX) -o $@ $(CXXFLAGS) $(CPPFLAGS) -c -DJS ${TREESRC}
+
 ${PHPTREEOBJS}:${TREESRC} ${TREEHEADER}
 	$(CXX) -o $@ $(CXXFLAGS) $(CPPFLAGS) -c -DPHP ${TREESRC}
 
@@ -93,6 +100,10 @@ jvecgen:${JOBJS} ${JHEADERS} main.cc
 phpvecgen:${PHPOBJS} ${PHPHEADERS} main.cc
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c -DPHP main.cc
 	$(CXX) -o $@ $(LDFLAGS) main.o ${PHPOBJS}
+
+jsvecgen:${JSOBJS} ${JSHEADERS} main.cc
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c -DJS main.cc
+	$(CXX) -o $@ $(LDFLAGS) main.o ${JSOBJS}  
 
 cbugfilters:${COBJS} ${CHEADERS} bugmain.cc
 	${CXX} ${CXXFLAGS} $(CPPFLAGS) -c -DCLANG bugmain.cc
@@ -111,12 +122,15 @@ out2html:${COBJS} out2html.C  # don't matter to use COBJS or others
 
 out2xml:${COBJS} out2xml.C  # don't matter to use COBJS or others
 	${CXX} ${CXXFLAGS} $(CPPFLAGS) -o $@ out2xml.C ${COBJS}
-	
+
 cParseTreeMain:${COBJS} ${CHEADERS} parseTreeMain.cc
 	${CXX} ${CXXFLAGS} $(CPPFLAGS) -DCLANG -o $@ parseTreeMain.cc ${COBJS}
 
 jParseTreeMain:${JOBJS} ${JHEADERS} parseTreeMain.cc
 	${CXX} ${CXXFLAGS} $(CPPFLAGS) -DJAVA -o $@ parseTreeMain.cc ${JOBJS}
+
+jsParseTreeMain:{$JSOBJS} ${JSHEADERS} parseTreeMain.cc
+	${CXX} ${CXXFLAGS} $(CPPFLAGS) -DJS -o $@ parseTreeMain.cc ${JSOBJS}
 
 phpParseTreeMain:${PHPOBJS} ${PHPHEADERS} parseTreeMain.cc
 	${CXX} ${CXXFLAGS} $(CPPFLAGS) -DPHP -o $@ parseTreeMain.cc ${PHPOBJS}
