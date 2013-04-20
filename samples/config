@@ -69,6 +69,8 @@ case $FILE_PATTERN in
     VGEN_EXEC="$VGEN_EXEC/main/jvecgen" ;;
   *.php )
     VGEN_EXEC="$VGEN_EXEC/main/phpvecgen" ;;
+  *.js )
+	  VGEN_EXEC="$VGEN_EXEC/main/jsvecgen" ;;
   *.c | *.h )
     VGEN_EXEC="$VGEN_EXEC/main/cvecgen" ;;
   * )
